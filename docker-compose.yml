@@ -1,0 +1,30 @@
+services:
+  scraper:
+    build: ./scraper
+    volumes:
+      - ./data:/data
+    command: python scrape.py
+    restart: "no"
+
+  scorer:
+    build: ./scorer
+    volumes:
+      - ./data:/data
+    command: python score.py
+    depends_on:
+      - scraper
+    restart: "no"
+
+  web:
+    build: ./web
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+
+  notifier:
+    build: ./notifier
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
