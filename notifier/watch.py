@@ -1,6 +1,12 @@
 import time
 import os
-from lead import parse_lead, validate_lead, has_seen_phone, mark_phone_seen
+from notifier.lead import (
+    parse_lead,
+    validate_lead,
+    has_seen_phone,
+    mark_phone_seen
+)
+from notifier.delivery import ConsoleDelivery
 
 CSV_PATH = os.path.join(
         os.path.dirname(__file__),
@@ -23,6 +29,8 @@ def tail_last_line(path):
     return ""
 
 def watch():
+    delivery = ConsoleDelivery()
+
     print(f"Watching {CSV_PATH}")
     last_size = os.path.getsize(CSV_PATH)
 
@@ -41,15 +49,13 @@ def watch():
                 print(" reasons:", ", ".join(reasons))
 
             else:
-                phone = lead.get("phone")
+                phone = lead.phone
 
                 if has_seen_phone(phone):
                     print("DUPLICATED LEAD (ignored):", phone)
                 else:
                     mark_phone_seen(phone)
-                    print("ACCEPTED LEAD:")
-                    for k, v in lead.items():
-                        print(f" {k}: {v}")
+                    delivery.send(lead)
 
             last_size = current_size
 
