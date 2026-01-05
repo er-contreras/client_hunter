@@ -6,7 +6,7 @@ from notifier.lead import (
     has_seen_phone,
     mark_phone_seen
 )
-from notifier.delivery import ConsoleDelivery
+from notifier.delivery import ConsoleDelivery, WebhookDelivery, WhatsAppDelivery
 
 CSV_PATH = os.path.join(
         os.path.dirname(__file__),
@@ -29,7 +29,19 @@ def tail_last_line(path):
     return ""
 
 def watch():
-    delivery = ConsoleDelivery()
+    # delivery = ConsoleDelivery()
+    # delivery = WebhookDelivery(url="https://your-webhook-endpoint.com/receive_lead")
+
+    # Replace with your credentials
+    phone_number_id = "988725430981915"
+    access_token = "EAATpH4GNaJgBQaVqkcaQlY6UOa4zfpZAZCKc58JgUt6bFlaL2NqoSaOtnQZC4QsveoSSKKU5EJodJALrg2cVrpLZA0DVlZC1KFtkR9dRuMsSzBMXuebxii1zCTetyZAMxdVh8ZBMwb7xiKJBtrVAedGB2qnZAxtQuRMXbdMQZCTYkxxNLl4HK9PsU6nF6b3j14k6B8hhLDqZBiXQpS6YVE1V4DmtK7L21213qJZBZBtyKiIX1QxaZCD6Ok1VXSMJFsIFZAGxrMZBKGHi82lmVFdWZCFKl9TEHZCpU"
+    template_name = "Erick Contreras"
+    
+    delivery = WhatsAppDelivery(
+        phone_number_id=phone_number_id,
+        access_token=access_token,
+        template_name=template_name
+    )
 
     print(f"Watching {CSV_PATH}")
     last_size = os.path.getsize(CSV_PATH)
