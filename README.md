@@ -5,6 +5,7 @@ docker run outreach python assist.py --lead "Plumbing Co"
 
 ## Top-level repository layout
 
+```bash
 client_hunter/
 ├── docker-compose.yml
 ├── .env
@@ -52,4 +53,4 @@ client_hunter/
 └── notifier/
     ├── Dockerfile
     └── whatsapp_web.py
-
+```
