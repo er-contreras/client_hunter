@@ -1,6 +1,4 @@
 /.venv
 /notifier/__pycache__
 /*.pyc
-/data/*.csv
-/data/*.txt
-/data
+/data/*

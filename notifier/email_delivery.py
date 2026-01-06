@@ -4,10 +4,21 @@ from notifier.logger import log_delivery
 import smtplib
 
 class EmailDelivery:
-    def __init__(self, smtp_host="localhost", smtp_port=1025, from_addr="leads@clienthunter.local"):
+    def __init__(
+        self,
+        smtp_host="localhost",
+        smtp_port=1025,
+        from_addr="leads@clienthunter.local",
+        username=None,
+        password=None,
+        use_tls=False,
+    ):
         self.smtp_host = smtp_host
         self.smtp_port = smtp_port
         self.from_addr = from_addr
+        self.username  = username
+        self.password  = password
+        self.use_tls   = use_tls
 
     def send(self, lead: Lead):
         if not lead.email:
@@ -36,11 +47,20 @@ Erick
         )
 
         try:
-            with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
-                server.send_message(msg)
+            server = smtplib.SMTP(self.smtp_host, self.smtp_port, timeout=10)
+            
+            if self.use_tls:
+                server.starttls()
+
+            if self.username and self.password:
+                server.login(self.username, self.password)
+
+
+            server.send_message(msg)
+            server.quit()
 
             print(f"Email sent to {lead.email}")
-            log_delivery("email", lead, "SENT", "local-smtp")
+            log_delivery("email", lead, "SENT", self.smtp_host)
 
         except Exception as e:
             print(f"Email delivery failed: {e}")

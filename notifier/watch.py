@@ -30,7 +30,14 @@ def tail_last_line(path):
     return ""
 
 def watch():
-    delivery = EmailDelivery()
+    delivery = EmailDelivery(
+        smtp_host="smtp.gmail.com",
+        smtp_port=587,
+        from_addr="Your Name eri8c9@gmail.com",
+        username=os.environ.get("GMAIL_USER"),
+        password=os.environ.get("GMAIL_APP_PASSWORD"),
+        use_tls=True
+    )
 
     print(f"Watching {CSV_PATH}")
     last_size = os.path.getsize(CSV_PATH)
