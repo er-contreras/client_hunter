@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ClientHunter — Operations</title>
+  <style>
+    body { font-family: sans-serif; margin: 40px; }
+    h1 { margin-bottom: 0; }
+    small { color: #666; }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .kpi {
+      border: 1px solid #ddd;
+      padding: 15px;
+      text-align: center;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background: #f4f4f4;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>ClientHunter — Outbound Operations</h1>
+<small>Last update: {{ updated }}</small>
+
+<div class="kpis">
+  <div class="kpi">
+    <strong>Leads Ingested</strong><br>
+    {{ ingested }}
+  </div>
+  <div class="kpi">
+    <strong>Validated</strong><br>
+    {{ raw }}
+  </div>
+  <div class="kpi">
+    <strong>Qualified</strong><br>
+    {{ qualified }}
+  </div>
+  <div class="kpi">
+    <strong>Delivered</strong><br>
+    {{ delivered }}
+  </div>
+  <div class="kpi">
+    <strong>Success %</strong><br>
+    {{ success_rate }}%
+  </div>
+</div>
+
+<div class="grid">
+  <div>
+    <h3>Rejection Reasons</h3>
+    <table>
+      <tr>
+        <th>Reason</th>
+        <th>Count</th>
+      </tr>
+      {% for reason, count in rejection_reasons.items() %}
+      <tr>
+        <td>{{ reason }}</td>
+        <td>{{ count }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div>
+    <h3>Recent Activity</h3>
+    <table>
+      <tr>
+        <th>Time</th>
+        <th>Phone</th>
+        <th>Channel</th>
+        <th>Status</th>
+        <th>Reason</th>
+      </tr>
+      {% for e in events %}
+      <tr>
+        <td>{{ e.time }}</td>
+        <td>{{ e.phone }}</td>
+        <td>{{ e.channel }}</td>
+        <td>{{ e.status }}</td>
+        <td>{{ e.reason }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
+
