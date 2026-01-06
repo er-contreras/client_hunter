@@ -14,14 +14,15 @@ def contact():
     if request.method == "POST":
         name = request.form.get("name", "")
         phone = request.form.get("phone", "")
+        email = request.form.get("email", "")
 
         exists = DATA_FILE.exists()
 
         with DATA_FILE.open("a", newline="") as f:
             writer = csv.writer(f)
             if not exists:
-                writer.writerow(["timestamp", "name", "phone"])
-            writer.writerow([int(time.time()), name, phone])
+                writer.writerow(["timestamp", "name", "phone", "email"])
+            writer.writerow([int(time.time()), name, phone, email])
 
         return "OK"
 

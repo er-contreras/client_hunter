@@ -7,6 +7,7 @@ from notifier.lead import (
     mark_phone_seen
 )
 from notifier.delivery import ConsoleDelivery
+from notifier.email_delivery import EmailDelivery
 
 CSV_PATH = os.path.join(
         os.path.dirname(__file__),
@@ -29,7 +30,7 @@ def tail_last_line(path):
     return ""
 
 def watch():
-    delivery = ConsoleDelivery()
+    delivery = EmailDelivery()
 
     print(f"Watching {CSV_PATH}")
     last_size = os.path.getsize(CSV_PATH)

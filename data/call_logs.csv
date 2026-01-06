@@ -1,2 +1,1 @@
-timestamp,business_name,phone,call_outcome,notes
-
+timestamp,channel,lead_phone,lead_email,status,details
