@@ -1,6 +1,7 @@
 from notifier.lead import Lead
 from email.message import EmailMessage
 from notifier.logger import log_delivery
+from notifier.rate_limiter import can_send
 import smtplib
 
 class EmailDelivery:
@@ -8,8 +9,14 @@ class EmailDelivery:
         self.smtp_host = smtp_host
         self.smtp_port = smtp_port
         self.from_addr = from_addr
-
+    
     def send(self, lead: Lead):
+        allowed, reason = can_send("email")
+        if not allowed:
+            print(f"Rate limit hit — skipping email ({reason})")
+            log_delivery("email", lead, "SKIPPED", reason)
+            return
+
         if not lead.email:
             print("No email provided - skipping email delivery")
             log_delivery("email", lead, "SKIPPED", "no-email")
