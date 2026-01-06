@@ -1,5 +1,6 @@
 from notifier.lead import Lead
 from email.message import EmailMessage
+from notifier.logger import log_delivery
 import smtplib
 
 class EmailDelivery:
@@ -11,6 +12,7 @@ class EmailDelivery:
     def send(self, lead: Lead):
         if not lead.email:
             print("No email provided - skipping email delivery")
+            log_delivery("email", lead, "SKIPPED", "no-email")
             return
 
         msg = EmailMessage()
@@ -20,20 +22,26 @@ class EmailDelivery:
 
         msg.set_content(
             f"""
-            Hi {lead.name},
+Hi {lead.name},
 
-            I came across your business and noticed a few areas where technology could
-            help you get more clients or save time.
+I came across your business and noticed a few areas where technology could
+help you get more clients or save time.
 
-            If you're open to it, I'd be happy to share a quick idea, no commitment.
+If you're open to it, I'd be happy to share a quick idea, no commitment.
 
-            Best,
+Best,
 
-            Erick
-            """
+Erick
+"""
         )
 
-        with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
-            server.send_message(msg)
+        try:
+            with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
+                server.send_message(msg)
 
-        print(f"Email sent to {lead.email}")
+            print(f"Email sent to {lead.email}")
+            log_delivery("email", lead, "SENT", "local-smtp")
+
+        except Exception as e:
+            print(f"Email delivery failed: {e}")
+            log_delivery("email", lead, "FAILED", str(e))
